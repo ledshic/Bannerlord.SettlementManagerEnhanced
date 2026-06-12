@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+  <!-- 
+    SettlementManagerEnhanced - 简体中文本地化 (Simplified Chinese)
+    MCMv5 使用 {=KEY} 语法在 SettingProperty 属性中。
+    这些字符串会出现在 Mod Options 中。
+    与 TroopManagerEnhanced 保持一致的风格（SME_ 前缀）。
+  -->
+
+  <!-- General -->
+  <string id="SME_MainDisplay" text="定居点管理增强" />
+  <string id="SME_EnableMod" text="启用模组" />
+  <string id="SME_EnableModHint" text="总开关。关闭后，所有定居点基金与驻军自动招募都不会发生。" />
+  <string id="SME_ShowNotifs" text="显示通知" />
+  <string id="SME_ShowNotifsHint" text="显示基金消耗、额外建造速度和从监狱向驻军招募的信息提示。" />
+  <string id="SME_General" text="常规" />
+
+  <!-- Fund Transfer & Boost -->
+  <string id="SME_Fund" text="基金转移与加速" />
+  <string id="SME_FundEnhance" text="启用基金缩放（每日2%/4%）" />
+  <string id="SME_FundEnhanceHint" text="当玩家拥有的城镇/城堡的当前建造基金（BoostBuildingProcess）&gt;0 时：每日额外消耗基金的 2%（城镇）或 4%（城堡）作为成本，并按 0.1（城镇）/0.05（城堡）的效率提供额外建造速度。在原版固定 500金=50 / 250金=20 的基础上叠加。支持将大量金币（上限已提升至100万）投入储备以加速建造。" />
+  <string id="SME_RaiseTransfer" text="将转移上限提升至 1,000,000（UI）" />
+  <string id="SME_RaiseTransferHint" text="修改定居点管理界面中建造基金转移滑块。原版单次转移上限约 10,000，此补丁将其有效上限提升至 1,000,000，便于将巨额金币投入储备以触发缩放加速效果。" />
+  <string id="SME_ForceFund" text="立即强制基金缩放" />
+  <string id="SME_ForceFundHint" text="立即对所有你拥有的城镇和城堡执行一次基金消耗+额外建造进度处理（一次性）。适合测试大额储备效果。" />
+
+  <!-- Castle Garrison Recruit -->
+  <string id="SME_Garrison" text="城堡驻军招募" />
+  <string id="SME_CastleRecruit" text="城堡监狱自动招募" />
+  <string id="SME_CastleRecruitHint" text="每日为你拥有的城堡执行：从城堡监狱（优先处理）和驻军监狱中，将已达到顺从度的囚犯自动招募进驻军。始终忽略 NPC 英雄（IsHero）。使用原版 PrisonerRecruitmentModel 计算顺从度。" />
+  <string id="SME_GarrTier" text="驻军囚犯最低阶层" />
+  <string id="SME_GarrTierHint" text="仅将达到此阶层或更高的囚犯从监狱自动招募进城堡驻军。" />
+  <string id="SME_MaxGarrPer" text="每城堡每日最大驻军招募数" />
+  <string id="SME_MaxGarrPerHint" text="每个城堡每日从其监狱向驻军转移囚犯的数量上限。" />
+  <string id="SME_GarrHighTier" text="优先高阶囚犯（驻军）" />
+  <string id="SME_GarrHighTierHint" text="为城堡驻军从监狱招募时，优先选择更高阶层的囚犯。" />
+  <string id="SME_ForceGarr" text="立即强制城堡驻军招募" />
+  <string id="SME_ForceGarrHint" text="立即为所有你拥有的城堡执行从监狱到驻军的招募（遵守上限与筛选）。" />
+
+  <!-- Runtime Messages -->
+  <string id="SME_FUND_001" text="{SETTLEMENT} 的建造基金：消耗 {COST} 获得 +{BUILD} 建造速度。" />
+  <string id="SME_GARR_001" text="从监狱为 {SETTLEMENT} 驻军招募了 {COUNT} 名囚犯。" />
+  <string id="SME_FUND_FORCE" text="强制基金处理影响了 {N} 个定居点。" />
+  <string id="SME_GARR_FORCE" text="强制驻军招募：{COUNT} 名囚犯。" />
+
+</strings>

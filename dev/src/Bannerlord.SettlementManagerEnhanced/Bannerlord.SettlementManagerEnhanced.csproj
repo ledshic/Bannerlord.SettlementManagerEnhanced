@@ -1,0 +1,134 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Set this to your local Bannerlord installation (the folder that contains bin\Win64_Shipping_Client).
+         Override examples:
+           - Windows:   dotnet build -p:GameFolder="C:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord"
+           - macOS:     dotnet build -p:GameFolder="$HOME/Library/Application Support/Steam/steamapps/common/Mount &amp; Blade II Bannerlord"
+           - Or set the GAMEFOLDER environment variable before building. -->
+    <GameFolder Condition="'$(GameFolder)' == ''">D:\Steam\steamapps\common\Mount &amp; Blade II Bannerlord</GameFolder>
+    <GameBinWin64>$(GameFolder)\bin\Win64_Shipping_Client</GameBinWin64>
+
+    <!-- Recommended: Set this when building for a specific game version -->
+    <!-- <GameVersion>1.2.12</GameVersion> -->
+
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <Platforms>AnyCPU;x64</Platforms>
+
+    <!-- Mod identity -->
+    <AssemblyName>Bannerlord.SettlementManagerEnhanced</AssemblyName>
+    <RootNamespace>Bannerlord.SettlementManagerEnhanced</RootNamespace>
+    <Version>1.0.0</Version>
+    <Authors>YourName</Authors>
+    <Product>Bannerlord.SettlementManagerEnhanced</Product>
+    <Description>Enhanced settlement fund transfer (0-1M), current fund % scaling for extra daily build speed (2%/4% burn + 0.1/0.05 efficiency), and castle garrison auto-recruit from prison (prison first, ignore NPC heroes). MCM configurable. See TroopManagerEnhanced for standardization.</Description>
+
+    <!-- Output: we copy via PostBuild to the _Module structure -->
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+    <!-- Recommended for Bannerlord mods -->
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <!-- Game assembly references (Private = false so they are not copied to output) -->
+  <ItemGroup>
+    <!-- Primary game assemblies -->
+    <Reference Include="TaleWorlds.CampaignSystem">
+      <HintPath>$(GameBinWin64)\TaleWorlds.CampaignSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.Core">
+      <HintPath>$(GameBinWin64)\TaleWorlds.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.Library">
+      <HintPath>$(GameBinWin64)\TaleWorlds.Library.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.Localization">
+      <HintPath>$(GameBinWin64)\TaleWorlds.Localization.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.InputSystem">
+      <HintPath>$(GameBinWin64)\TaleWorlds.InputSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.MountAndBlade">
+      <HintPath>$(GameBinWin64)\TaleWorlds.MountAndBlade.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.ObjectSystem">
+      <HintPath>$(GameBinWin64)\TaleWorlds.ObjectSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.SaveSystem">
+      <HintPath>$(GameBinWin64)\TaleWorlds.SaveSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <!-- Required for UI patches on the construction fund transfer slider (SettlementConstructionVM) -->
+    <Reference Include="SandBox.ViewModelCollection">
+      <HintPath>$(GameBinWin64)\SandBox.ViewModelCollection.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- SandBox may be useful for other settlement types; include for completeness -->
+    <Reference Include="SandBox">
+      <HintPath>$(GameBinWin64)\SandBox.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Bannerlord community framework packages -->
+  <ItemGroup>
+    <!-- MCM v5+ - IncludeAssets="compile" is critical -->
+    <PackageReference Include="Bannerlord.MCM" Version="5.11.3" IncludeAssets="compile" />
+
+    <!-- Optional ButterLib -->
+    <!-- <PackageReference Include="Bannerlord.ButterLib" Version="2.8.0" IncludeAssets="compile" /> -->
+  </ItemGroup>
+
+  <!-- Post-build: Copy the built DLL + pdb + ModuleData into the deployable _Module structure.
+       Note: Version in _Module/SubModule.xml is kept in sync by build.ps1 (recommended packaging script).
+       This target runs automatically on `dotnet build`. -->
+  <Target Name="CopyToModule" AfterTargets="Build">
+    <!-- Note: With the unified dev/ layout, packaging is primarily handled by dev/build.ps1.
+         This target is kept for quick iteration convenience and points to a _Module at mod root. -->
+    <ItemGroup>
+      <ModOutputFiles Include="$(OutputPath)$(AssemblyName).dll" />
+      <ModOutputFiles Include="$(OutputPath)$(AssemblyName).pdb" Condition="Exists('$(OutputPath)$(AssemblyName).pdb')" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(ModOutputFiles)"
+          DestinationFolder="$(_ModulePath)bin\Win64_Shipping_Client"
+          SkipUnchangedFiles="true" />
+
+    <ItemGroup>
+      <ModModuleDataFiles Include="$(MSBuildProjectDirectory)\..\..\..\module\ModuleData\**\*.*" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(ModModuleDataFiles)"
+          DestinationFiles="@(ModModuleDataFiles->'$(_ModulePath)ModuleData\%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+
+    <Message Text="Bannerlord.SettlementManagerEnhanced: Copied build output + ModuleData to _Module/" Importance="high" />
+  </Target>
+
+  <!-- Convenience: define _ModulePath relative to project (for quick dotnet build iteration).
+       From dev/src/Bannerlord.SettlementManagerEnhanced/ this reaches the mod root _Module. -->
+  <PropertyGroup>
+    <_ModulePath>$(MSBuildProjectDirectory)\..\..\..\ _Module\</_ModulePath>
+  </PropertyGroup>
+
+</Project>

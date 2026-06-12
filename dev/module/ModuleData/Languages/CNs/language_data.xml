@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/BUTR/Bannerlord.XmlSchemas/master/ModuleLanguageData.xsd"
+              id="Chinese (CNs)"
+              name="Chinese (CNs)"
+              subtitle_extension="zh-CN"
+              supported_iso="zh-CN,zh"
+              under_development="false">
+  <LanguageFile xml_path="CNs/sta_strings.xml" />
+</LanguageData>

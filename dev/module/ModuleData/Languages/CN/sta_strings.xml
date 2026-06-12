@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+  <!-- SettlementManagerEnhanced - Traditional Chinese (fallback to English keys where not fully translated) -->
+  <string id="SME_MainDisplay" text="Settlement Manager Enhanced {VERSION}" />
+  <string id="SME_EnableMod" text="Enable Mod" />
+  <string id="SME_EnableModHint" text="Master toggle. When off, no settlement fund or garrison auto actions will occur." />
+  <string id="SME_ShowNotifs" text="Show Notifications" />
+  <string id="SME_ShowNotifsHint" text="Display information messages for fund burns, extra build speed, and prison-to-garrison recruits." />
+  <string id="SME_General" text="General" />
+  <string id="SME_Fund" text="Fund Transfer &amp; Boost" />
+  <string id="SME_FundEnhance" text="Enable Fund Scaling (2%/4% daily)" />
+  <string id="SME_FundEnhanceHint" text="On player-owned towns/castles with current construction fund (BoostBuildingProcess) &gt; 0: every day burn an extra 2% (town) / 4% (castle) of the fund as cost and grant additional build speed using 0.1 (town) / 0.05 (castle) efficiency. Layers on top of vanilla flat behavior. Supports up to 1M transfers." />
+  <string id="SME_RaiseTransfer" text="Raise Transfer Limit to 1,000,000 (UI)" />
+  <string id="SME_RaiseTransferHint" text="Patches the construction fund transfer slider. Vanilla ~10k cap raised to 1M." />
+  <string id="SME_ForceFund" text="Force Fund Scaling Pass Now" />
+  <string id="SME_ForceFundHint" text="Immediately run fund % burn + build progress on all owned fortifications." />
+  <string id="SME_Garrison" text="Castle Garrison Recruit" />
+  <string id="SME_CastleRecruit" text="Castle Auto Recruit from Prison" />
+  <string id="SME_CastleRecruitHint" text="Daily for owned castles: recruit ready prisoners from castle prison (first) and garrison prison into garrison. Ignore NPC heroes." />
+  <string id="SME_GarrTier" text="Minimum Prisoner Tier (Garrison)" />
+  <string id="SME_GarrTierHint" text="Only auto-recruit prisoners of this tier or higher into castle garrisons." />
+  <string id="SME_MaxGarrPer" text="Max Garrison Recruits Per Castle Per Day" />
+  <string id="SME_MaxGarrPerHint" text="Hard cap per castle on prisoners moved from prison(s) to garrison." />
+  <string id="SME_GarrHighTier" text="Prioritize High Tier Prisoners (Garrison)" />
+  <string id="SME_GarrHighTierHint" text="Take higher tier first when recruiting for garrisons from prison." />
+  <string id="SME_ForceGarr" text="Force Castle Garrison Recruit Now" />
+  <string id="SME_ForceGarrHint" text="Immediately recruit from prisons to garrisons for all owned castles." />
+  <string id="SME_FUND_001" text="Construction fund at {SETTLEMENT}: burned {COST} for +{BUILD} build speed." />
+  <string id="SME_GARR_001" text="Recruited {COUNT} prisoners from prison into {SETTLEMENT} garrison." />
+  <string id="SME_FUND_FORCE" text="Forced fund pass affected {N} settlements." />
+  <string id="SME_GARR_FORCE" text="Forced garrison recruit: {COUNT} prisoners." />
+  <string id="SME_INIT_FAIL" text="SettlementManagerEnhanced failed to initialize Harmony. Check logs." />
+</strings>
