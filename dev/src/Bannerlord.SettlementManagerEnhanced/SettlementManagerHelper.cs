@@ -1,6 +1,7 @@
 using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
 
 namespace Bannerlord.SettlementManagerEnhanced
 {
@@ -10,6 +11,8 @@ namespace Bannerlord.SettlementManagerEnhanced
     /// </summary>
     public static class SettlementManagerHelper
     {
+        private const int MaxBuildingLevel = 3;
+
         /// <summary>
         /// True for player-owned towns and castles (the fiefs where fund transfer UI and our daily logic are relevant).
         /// </summary>
@@ -45,9 +48,9 @@ namespace Bannerlord.SettlementManagerEnhanced
 
             Building? building = town.CurrentBuilding;
             if (building == null)
-                building = town.CurrentDefault;
+                building = town.CurrentDefaultBuilding;
 
-            if (building == null || building.CurrentLevel >= building.MaxLevel)
+            if (building == null || building.CurrentLevel >= MaxBuildingLevel)
                 return;
 
             int cost = building.GetConstructionCost();
@@ -59,14 +62,14 @@ namespace Bannerlord.SettlementManagerEnhanced
             building.BuildingProgress += delta;
 
             // Level up as many times as we crossed full levels (rare for one day but correct).
-            while (building.BuildingProgress >= 1.0f && building.CurrentLevel < building.MaxLevel)
+            while (building.BuildingProgress >= 1.0f && building.CurrentLevel < MaxBuildingLevel)
             {
                 building.BuildingProgress -= 1.0f;
-                building.CurrentLevel = Math.Min(building.MaxLevel, building.CurrentLevel + 1);
+                building.CurrentLevel = Math.Min(MaxBuildingLevel, building.CurrentLevel + 1);
             }
 
             // Clamp in case of over-progress from very large % burns.
-            if (building.BuildingProgress > 1.0f && building.CurrentLevel >= building.MaxLevel)
+            if (building.BuildingProgress > 1.0f && building.CurrentLevel >= MaxBuildingLevel)
                 building.BuildingProgress = 1.0f;
         }
     }

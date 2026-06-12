@@ -77,7 +77,7 @@ namespace Bannerlord.SettlementManagerEnhanced
                     text.SetTextVariable("SETTLEMENT", settlement.Name?.ToString() ?? "settlement");
                     text.SetTextVariable("COST", additionalCost);
                     text.SetTextVariable("BUILD", additionalBuild);
-                    InformationManager.DisplayMessage(new InformationMessage(text.ToString(), Colors.Gold));
+                    InformationManager.DisplayMessage(new InformationMessage(text.ToString(), Colors.Yellow));
                 }
                 catch { /* non-fatal */ }
             }

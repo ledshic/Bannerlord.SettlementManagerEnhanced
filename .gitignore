@@ -1,0 +1,13 @@
+# .NET build intermediates
+**/bin/
+**/obj/
+
+# Bannerlord module/package outputs
+/out/
+/_Module/
+
+# Local IDE/user files
+.vs/
+.vscode/
+*.user
+*.suo

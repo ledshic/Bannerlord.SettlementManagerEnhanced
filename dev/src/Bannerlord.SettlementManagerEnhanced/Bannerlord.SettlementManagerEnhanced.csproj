@@ -8,6 +8,7 @@
            - Or set the GAMEFOLDER environment variable before building. -->
     <GameFolder Condition="'$(GameFolder)' == ''">D:\Steam\steamapps\common\Mount &amp; Blade II Bannerlord</GameFolder>
     <GameBinWin64>$(GameFolder)\bin\Win64_Shipping_Client</GameBinWin64>
+    <SandBoxBinWin64>$(GameFolder)\Modules\SandBox\bin\Win64_Shipping_Client</SandBoxBinWin64>
 
     <!-- Recommended: Set this when building for a specific game version -->
     <!-- <GameVersion>1.2.12</GameVersion> -->
@@ -82,12 +83,12 @@
 
     <!-- Required for UI patches on the construction fund transfer slider (SettlementConstructionVM) -->
     <Reference Include="SandBox.ViewModelCollection">
-      <HintPath>$(GameBinWin64)\SandBox.ViewModelCollection.dll</HintPath>
+      <HintPath>$(SandBoxBinWin64)\SandBox.ViewModelCollection.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <!-- SandBox may be useful for other settlement types; include for completeness -->
     <Reference Include="SandBox">
-      <HintPath>$(GameBinWin64)\SandBox.dll</HintPath>
+      <HintPath>$(SandBoxBinWin64)\SandBox.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
@@ -135,7 +136,7 @@
   <!-- Convenience: define _ModulePath relative to project (for quick dotnet build iteration).
        From dev/src/Bannerlord.SettlementManagerEnhanced/ this reaches the mod root _Module. -->
   <PropertyGroup>
-    <_ModulePath>$(MSBuildProjectDirectory)\..\..\..\ _Module\</_ModulePath>
+    <_ModulePath>$(MSBuildProjectDirectory)\..\..\..\_Module\</_ModulePath>
   </PropertyGroup>
 
 </Project>

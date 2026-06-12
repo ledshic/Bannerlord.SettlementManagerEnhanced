@@ -3,6 +3,7 @@ using MCM.Abstractions.Attributes;
 using MCM.Abstractions.Attributes.v2;
 using MCM.Abstractions.Base.Global;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace Bannerlord.SettlementManagerEnhanced
@@ -101,7 +102,7 @@ namespace Bannerlord.SettlementManagerEnhanced
                                 {
                                     var text = new TextObject("{=SME_FUND_FORCE}Forced fund pass affected {N} settlements.", null);
                                     text.SetTextVariable("N", affected);
-                                    InformationManager.DisplayMessage(new InformationMessage(text.ToString(), Colors.Gold));
+                                    InformationManager.DisplayMessage(new InformationMessage(text.ToString(), Colors.Yellow));
                                 }
                             }
                         }

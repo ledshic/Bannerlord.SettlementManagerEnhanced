@@ -73,7 +73,7 @@ namespace Bannerlord.SettlementManagerEnhanced
             if (prisonSources.Count == 0)
                 return 0;
 
-            int freeSlots = Math.Max(0, garrison.LimitedPartySize - garrisonRoster.TotalManCount);
+            int freeSlots = Math.Max(0, GetPartySizeLimit(garrison) - garrisonRoster.TotalManCount);
             if (freeSlots <= 0)
                 return 0;
 
@@ -81,7 +81,7 @@ namespace Bannerlord.SettlementManagerEnhanced
             int maxThisCheck = Math.Max(1, settings.MaxGarrisonRecruitsPerCastle);
             bool prioritizeHighTier = settings.PrioritizeHighTierGarrisonPrisoners;
 
-            var recruitmentModel = Campaign.Current?.Models?.PrisonerRecruitmentModel;
+            var recruitmentModel = Campaign.Current?.Models?.PrisonerRecruitmentCalculationModel;
 
             var candidates = new List<GarrisonPrisonerCandidate>();
 
@@ -106,7 +106,7 @@ namespace Bannerlord.SettlementManagerEnhanced
                     int neededPerOne = 100;
                     if (recruitmentModel != null)
                     {
-                        neededPerOne = recruitmentModel.GetConformityNeededToRecruitPrisoner(garrison.Party, troop);
+                        neededPerOne = GetConformityNeededToRecruitPrisoner(recruitmentModel, garrison, troop);
                         if (neededPerOne <= 0) neededPerOne = 1;
                     }
 
@@ -220,6 +220,58 @@ namespace Bannerlord.SettlementManagerEnhanced
                 result.Add(garrison.PrisonRoster);
 
             return result;
+        }
+
+        private int GetPartySizeLimit(MobileParty garrison)
+        {
+            string[] candidateNames = { "PartySizeLimit", "LimitedPartySize", "LimitPartySize" };
+
+            foreach (var name in candidateNames)
+            {
+                var prop = garrison.GetType().GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                if (prop != null && prop.PropertyType == typeof(int))
+                    return (int)prop.GetValue(garrison);
+            }
+
+            var party = garrison.Party;
+            if (party != null)
+            {
+                foreach (var name in candidateNames)
+                {
+                    var prop = party.GetType().GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    if (prop != null && prop.PropertyType == typeof(int))
+                        return (int)prop.GetValue(party);
+                }
+            }
+
+            return int.MaxValue;
+        }
+
+        private int GetConformityNeededToRecruitPrisoner(object recruitmentModel, MobileParty garrison, CharacterObject troop)
+        {
+            var methods = recruitmentModel.GetType()
+                .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(m => m.Name == "GetConformityNeededToRecruitPrisoner");
+
+            foreach (var method in methods)
+            {
+                var parameters = method.GetParameters();
+                object[]? args = null;
+
+                if (parameters.Length == 1 && parameters[0].ParameterType.IsInstanceOfType(troop))
+                    args = new object[] { troop };
+                else if (parameters.Length == 2 && parameters[0].ParameterType.IsInstanceOfType(garrison.Party) && parameters[1].ParameterType.IsInstanceOfType(troop))
+                    args = new object[] { garrison.Party, troop };
+
+                if (args == null)
+                    continue;
+
+                var value = method.Invoke(recruitmentModel, args);
+                if (value is int needed)
+                    return needed;
+            }
+
+            return 100;
         }
 
         private struct GarrisonPrisonerCandidate

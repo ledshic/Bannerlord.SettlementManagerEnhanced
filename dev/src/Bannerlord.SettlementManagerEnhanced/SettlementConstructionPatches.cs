@@ -25,15 +25,36 @@ namespace Bannerlord.SettlementManagerEnhanced
     public static class SettlementConstructionPatches
     {
         // The VM lives in SandBox.ViewModelCollection.dll (TownManagement sub-namespace in most versions).
-        private static readonly string VmTypeName = "SandBox.ViewModelCollection.TownManagement.SettlementConstructionVM";
+        private static readonly string[] VmTypeNames =
+        {
+            "TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement.TownManagementReserveControlVM",
+            "SandBox.ViewModelCollection.TownManagement.SettlementConstructionVM"
+        };
+
+        private static readonly string[] TargetMethodNames =
+        {
+            "Refresh",
+            "RefreshValues"
+        };
 
         /// <summary>
         /// Postfix on the VM's Refresh (or equivalent update) method.
         /// We attempt to locate and raise internal fields/properties that control the max gold the player
         /// can transfer into the settlement's construction fund (BoostBuildingProcess) in one go.
         /// </summary>
+        [HarmonyPrepare]
+        public static bool Prepare()
+        {
+            return FindTargetMethod() != null;
+        }
+
+        [HarmonyTargetMethod]
+        public static MethodBase? TargetMethod()
+        {
+            return FindTargetMethod();
+        }
+
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(SandBox.ViewModelCollection.TownManagement.SettlementConstructionVM), "Refresh")]
         public static void Postfix_RaiseTransferLimit(object __instance)
         {
             try
@@ -110,6 +131,25 @@ namespace Bannerlord.SettlementManagerEnhanced
             {
                 Debug.Print($"[SettlementManagerEnhanced][Patches] Transfer limit patch error (non-fatal): {ex.Message}");
             }
+        }
+
+        private static MethodBase? FindTargetMethod()
+        {
+            foreach (var typeName in VmTypeNames)
+            {
+                var type = AccessTools.TypeByName(typeName);
+                if (type == null)
+                    continue;
+
+                foreach (var methodName in TargetMethodNames)
+                {
+                    var method = AccessTools.Method(type, methodName);
+                    if (method != null)
+                        return method;
+                }
+            }
+
+            return null;
         }
 
         // Example of an optional model-level observation patch (commented; kept for future if vanilla flat 500/50 needs suppression or scaling awareness).
