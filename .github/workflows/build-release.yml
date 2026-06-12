@@ -1,0 +1,63 @@
+name: Build And Release Mod
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version tag (example: v1.0.0)"
+        required: true
+        default: v1.0.0
+      prerelease:
+        description: Mark release as pre-release
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build & Package (via unified script)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $version = "${{ github.event.inputs.version }}"
+          ./dev/build.ps1 -Version $version
+
+      - name: Locate produced zip
+        id: zip
+        shell: pwsh
+        run: |
+          $zipFile = Get-ChildItem -Path ./out -Filter "*.zip" | Select-Object -First 1
+          if (-not $zipFile) {
+            Write-Error "No zip was produced by dev/build.ps1"
+            exit 1
+          }
+          Write-Host "Using zip: $($zipFile.FullName)"
+          echo "path=$($zipFile.FullName)" >> $env:GITHUB_OUTPUT
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.repository.name }}-${{ github.event.inputs.version }}
+          path: ${{ steps.zip.outputs.path }}
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          name: ${{ github.event.repository.name }} ${{ github.event.inputs.version }}
+          prerelease: ${{ github.event.inputs.prerelease }}
+          files: ${{ steps.zip.outputs.path }}

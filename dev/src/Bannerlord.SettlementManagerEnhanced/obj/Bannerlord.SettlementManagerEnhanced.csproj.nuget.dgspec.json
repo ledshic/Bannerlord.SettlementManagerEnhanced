@@ -51,6 +51,11 @@
               "target": "Package",
               "version": "[5.11.3, )"
             },
+            "Bannerlord.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.*, )"
+            },
             "NETStandard.Library": {
               "suppressParent": "All",
               "target": "Package",

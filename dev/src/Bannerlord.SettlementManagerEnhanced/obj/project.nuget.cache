@@ -1,10 +1,20 @@
 {
   "version": 2,
-  "dgSpecHash": "ztHKOgnT99U=",
+  "dgSpecHash": "QpHvMUvhI4I=",
   "success": true,
   "projectFilePath": "/Users/dongxuli/Documents/workspace/Bannerlord.SettlementManagerEnhanced/dev/src/Bannerlord.SettlementManagerEnhanced/Bannerlord.SettlementManagerEnhanced.csproj",
   "expectedPackageFiles": [
     "/Users/dongxuli/.nuget/packages/bannerlord.mcm/5.11.3/bannerlord.mcm.5.11.3.nupkg.sha512",
+    "/Users/dongxuli/.nuget/packages/bannerlord.referenceassemblies/1.4.6.115628/bannerlord.referenceassemblies.1.4.6.115628.nupkg.sha512",
+    "/Users/dongxuli/.nuget/packages/bannerlord.referenceassemblies.birthanddeath/1.4.6.115628/bannerlord.referenceassemblies.birthanddeath.1.4.6.115628.nupkg.sha512",
+    "/Users/dongxuli/.nuget/packages/bannerlord.referenceassemblies.core/1.4.6.115628/bannerlord.referenceassemblies.core.1.4.6.115628.nupkg.sha512",
+    "/Users/dongxuli/.nuget/packages/bannerlord.referenceassemblies.custombattle/1.4.6.115628/bannerlord.referenceassemblies.custombattle.1.4.6.115628.nupkg.sha512",
+    "/Users/dongxuli/.nuget/packages/bannerlord.referenceassemblies.fastmode/1.4.6.115628/bannerlord.referenceassemblies.fastmode.1.4.6.115628.nupkg.sha512",
+    "/Users/dongxuli/.nuget/packages/bannerlord.referenceassemblies.multiplayer/1.4.6.115628/bannerlord.referenceassemblies.multiplayer.1.4.6.115628.nupkg.sha512",
+    "/Users/dongxuli/.nuget/packages/bannerlord.referenceassemblies.native/1.4.6.115628/bannerlord.referenceassemblies.native.1.4.6.115628.nupkg.sha512",
+    "/Users/dongxuli/.nuget/packages/bannerlord.referenceassemblies.navaldlc/1.4.6.115628/bannerlord.referenceassemblies.navaldlc.1.4.6.115628.nupkg.sha512",
+    "/Users/dongxuli/.nuget/packages/bannerlord.referenceassemblies.sandbox/1.4.6.115628/bannerlord.referenceassemblies.sandbox.1.4.6.115628.nupkg.sha512",
+    "/Users/dongxuli/.nuget/packages/bannerlord.referenceassemblies.storymode/1.4.6.115628/bannerlord.referenceassemblies.storymode.1.4.6.115628.nupkg.sha512",
     "/Users/dongxuli/.nuget/packages/lib.harmony/2.2.2/lib.harmony.2.2.2.nupkg.sha512",
     "/Users/dongxuli/.nuget/packages/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "/Users/dongxuli/.nuget/packages/netstandard.library/2.0.3/netstandard.library.2.0.3.nupkg.sha512"
