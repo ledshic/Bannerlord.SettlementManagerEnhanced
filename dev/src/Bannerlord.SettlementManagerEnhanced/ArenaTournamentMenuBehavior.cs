@@ -37,7 +37,10 @@ namespace Bannerlord.SettlementManagerEnhanced
 
         public override void SyncData(IDataStore dataStore)
         {
-            dataStore.SyncData("_smeQueuedSponsoredTournaments", ref _queuedSponsoredTournaments);
+            // NOTE: _queuedSponsoredTournaments is NOT persisted across saves.
+            // It's transient in-memory data that queues upcoming tournaments if the current town already has an active tournament.
+            // We don't serialize it because Dictionary<Town, int> cannot be serialized (Town is a non-serializable game object).
+            // This doesn't matter because queued tournaments will eventually be scheduled on the next daily tick after the current tournament ends.
             _queuedSponsoredTournaments ??= new Dictionary<Town, int>();
         }
 
