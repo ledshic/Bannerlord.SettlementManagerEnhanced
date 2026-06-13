@@ -5,7 +5,7 @@
     <tag language="English" />
   </tags>
   <strings>
-  <!-- 
+  <!--
     SettlementManagerEnhanced - English Localization
     MCMv5 uses {=KEY} syntax in SettingProperty attributes.
     These strings appear in Mod Options. Matches TroopManagerEnhanced conventions (SME_ prefix).
@@ -47,6 +47,19 @@
   <string id="SME_FUND_FORCE" text="Forced fund pass affected {N} settlements." />
   <string id="SME_GARR_FORCE" text="Forced garrison recruit: {COUNT} prisoners." />
   <string id="SME_INIT_FAIL" text="SettlementManagerEnhanced failed to initialize Harmony. Check logs." />
+
+  <!-- Arena Tournament Menu Extension -->
+  <string id="SME_ARENA_ASK_NEXT" text="Ask where the next tournaments will be held" />
+  <string id="SME_ARENA_HOST_HERE" text="Sponsor a tournament here (10,000)" />
+  <string id="SME_ARENA_HOST_HERE_DISABLED" text="You need at least {GOLD} denars." />
+  <string id="SME_ARENA_QUERY_MENU" text="{SME_TOURNAMENT_QUERY_REPLY}" />
+  <string id="SME_ARENA_LOCATE" text="Locate these towns" />
+  <string id="SME_ARENA_LOCATE_DISABLED" text="No known active tournaments to locate." />
+  <string id="SME_ARENA_BACK" text="Back" />
+  <string id="SME_ARENA_LOCATED_MSG" text="Marked {COUNT} tournament towns on map." />
+  <string id="SME_ARENA_HOSTED_NOW" text="A sponsored tournament has been added in {TOWN}." />
+  <string id="SME_ARENA_QUEUED" text="{TOWN} already has an active tournament. Your sponsored tournament has been queued for the next available round." />
+  <string id="SME_ARENA_QUEUED_STARTED" text="Your queued sponsored tournament has now started in {TOWN}." />
 
   </strings>
 </base>

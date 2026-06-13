@@ -5,7 +5,7 @@
     <tag language="简体中文" />
   </tags>
   <strings>
-  <!-- 
+  <!--
     SettlementManagerEnhanced - 简体中文本地化 (Simplified Chinese)
     MCMv5 使用 {=KEY} 语法在 SettingProperty 属性中。
     这些字符串会出现在 Mod Options 中。
@@ -48,6 +48,19 @@
   <string id="SME_FUND_FORCE" text="强制基金处理影响了 {N} 个定居点。" />
   <string id="SME_GARR_FORCE" text="强制驻军招募：{COUNT} 名囚犯。" />
   <string id="SME_INIT_FAIL" text="SettlementManagerEnhanced 初始化 Harmony 失败。请检查日志。" />
+
+  <!-- 竞技场巡回赛菜单扩展 -->
+  <string id="SME_ARENA_ASK_NEXT" text="询问下一轮巡回赛城市" />
+  <string id="SME_ARENA_HOST_HERE" text="在本城赞助巡回赛（10,000）" />
+  <string id="SME_ARENA_HOST_HERE_DISABLED" text="你的第纳尔至少需要 {GOLD}。" />
+  <string id="SME_ARENA_QUERY_MENU" text="{SME_TOURNAMENT_QUERY_REPLY}" />
+  <string id="SME_ARENA_LOCATE" text="定位这些城镇" />
+  <string id="SME_ARENA_LOCATE_DISABLED" text="当前没有可定位的巡回赛城镇。" />
+  <string id="SME_ARENA_BACK" text="返回" />
+  <string id="SME_ARENA_LOCATED_MSG" text="已在地图上标记 {COUNT} 个巡回赛城镇。" />
+  <string id="SME_ARENA_HOSTED_NOW" text="已在 {TOWN} 安排一场赞助巡回赛。" />
+  <string id="SME_ARENA_QUEUED" text="{TOWN} 当前已有巡回赛。你赞助的巡回赛已排入下一可用轮次。" />
+  <string id="SME_ARENA_QUEUED_STARTED" text="你排队赞助的巡回赛已在 {TOWN} 开始。" />
 
   </strings>
 </base>

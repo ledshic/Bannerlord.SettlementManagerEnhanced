@@ -11,8 +11,6 @@ namespace Bannerlord.SettlementManagerEnhanced
     /// </summary>
     public static class SettlementManagerHelper
     {
-        private const int MaxBuildingLevel = 3;
-
         /// <summary>
         /// True for player-owned towns and castles (the fiefs where fund transfer UI and our daily logic are relevant).
         /// </summary>
@@ -50,27 +48,28 @@ namespace Bannerlord.SettlementManagerEnhanced
             if (building == null)
                 building = town.CurrentDefaultBuilding;
 
-            if (building == null || building.CurrentLevel >= MaxBuildingLevel)
+            if (building == null || building.CurrentLevel >= 3)
                 return;
 
             int cost = building.GetConstructionCost();
             if (cost <= 0)
                 cost = 1;
 
-            // BuildingProgress is the 0..1 (per level) accumulator. Points / cost gives the fractional progress.
-            float delta = points / (float)cost;
-            building.BuildingProgress += delta;
-
-            // Level up as many times as we crossed full levels (rare for one day but correct).
-            while (building.BuildingProgress >= 1.0f && building.CurrentLevel < MaxBuildingLevel)
+            // In different game versions/builds, BuildingProgress may be treated as either
+            // normalized level progress (0..1) or raw construction points.
+            // We only add progress and let vanilla complete/level logic run, to avoid unit mismatch
+            // causing accidental instant completion.
+            if (building.BuildingProgress > 1.0f)
             {
-                building.BuildingProgress -= 1.0f;
-                building.CurrentLevel = Math.Min(MaxBuildingLevel, building.CurrentLevel + 1);
+                // Raw points mode: add points directly.
+                building.BuildingProgress += points;
             }
-
-            // Clamp in case of over-progress from very large % burns.
-            if (building.BuildingProgress > 1.0f && building.CurrentLevel >= MaxBuildingLevel)
-                building.BuildingProgress = 1.0f;
+            else
+            {
+                // Normalized mode: convert points to a 0..1 delta using construction cost.
+                float delta = points / (float)cost;
+                building.BuildingProgress += delta;
+            }
         }
     }
 }

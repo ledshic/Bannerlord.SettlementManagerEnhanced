@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 
@@ -34,7 +36,8 @@ namespace Bannerlord.SettlementManagerEnhanced
         private static readonly string[] TargetMethodNames =
         {
             "Refresh",
-            "RefreshValues"
+            "RefreshValues",
+            "ExecuteConfirm"
         };
 
         /// <summary>
@@ -45,13 +48,13 @@ namespace Bannerlord.SettlementManagerEnhanced
         [HarmonyPrepare]
         public static bool Prepare()
         {
-            return FindTargetMethod() != null;
+            return FindTargetMethods().Count > 0;
         }
 
-        [HarmonyTargetMethod]
-        public static MethodBase? TargetMethod()
+        [HarmonyTargetMethods]
+        public static IEnumerable<MethodBase> TargetMethods()
         {
-            return FindTargetMethod();
+            return FindTargetMethods();
         }
 
         [HarmonyPostfix]
@@ -65,10 +68,14 @@ namespace Bannerlord.SettlementManagerEnhanced
 
                 var t = __instance.GetType();
                 const int TARGET_MAX = 1000000;
+                int heroGold = Hero.MainHero?.Gold ?? TARGET_MAX;
+                int desiredMax = Math.Max(0, Math.Min(TARGET_MAX, heroGold));
 
                 // Common internal field names seen across similar UIs / versions
                 string[] candidateFields = new[]
                 {
+                    "_maxReserveAmount",
+                    "MaxReserveAmount",
                     "_transferableGoldMax",
                     "_maxGold",
                     "TransferableGoldMax",
@@ -86,9 +93,9 @@ namespace Bannerlord.SettlementManagerEnhanced
                     if (field != null && field.FieldType == typeof(int))
                     {
                         int current = (int)field.GetValue(__instance);
-                        if (current > 0 && current < TARGET_MAX)
+                        if (current != desiredMax)
                         {
-                            field.SetValue(__instance, TARGET_MAX);
+                            field.SetValue(__instance, desiredMax);
                             bumped = true;
                         }
                     }
@@ -97,9 +104,9 @@ namespace Bannerlord.SettlementManagerEnhanced
                     if (prop != null && prop.CanWrite && prop.PropertyType == typeof(int))
                     {
                         int current = (int)prop.GetValue(__instance);
-                        if (current > 0 && current < TARGET_MAX)
+                        if (current != desiredMax)
                         {
-                            prop.SetValue(__instance, TARGET_MAX);
+                            prop.SetValue(__instance, desiredMax);
                             bumped = true;
                         }
                     }
@@ -113,9 +120,9 @@ namespace Bannerlord.SettlementManagerEnhanced
                     if (p != null && p.CanWrite && p.PropertyType == typeof(int))
                     {
                         int cur = (int)p.GetValue(__instance);
-                        if (cur > 0 && cur < TARGET_MAX)
+                        if (cur != desiredMax)
                         {
-                            p.SetValue(__instance, TARGET_MAX);
+                            p.SetValue(__instance, desiredMax);
                             bumped = true;
                         }
                     }
@@ -133,8 +140,10 @@ namespace Bannerlord.SettlementManagerEnhanced
             }
         }
 
-        private static MethodBase? FindTargetMethod()
+        private static List<MethodBase> FindTargetMethods()
         {
+            var methods = new List<MethodBase>();
+
             foreach (var typeName in VmTypeNames)
             {
                 var type = AccessTools.TypeByName(typeName);
@@ -145,11 +154,11 @@ namespace Bannerlord.SettlementManagerEnhanced
                 {
                     var method = AccessTools.Method(type, methodName);
                     if (method != null)
-                        return method;
+                        methods.Add(method);
                 }
             }
 
-            return null;
+            return methods;
         }
 
         // Example of an optional model-level observation patch (commented; kept for future if vanilla flat 500/50 needs suppression or scaling awareness).

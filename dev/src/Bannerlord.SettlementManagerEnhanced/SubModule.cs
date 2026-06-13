@@ -68,8 +68,9 @@ namespace Bannerlord.SettlementManagerEnhanced
                 var campaignStarter = (CampaignGameStarter)gameStarter;
 
                 campaignStarter.AddBehavior(new SettlementManagementBehavior());
+                campaignStarter.AddBehavior(new ArenaTournamentMenuBehavior());
 
-                Debug.Print("[Bannerlord.SettlementManagerEnhanced] SettlementManagementBehavior registered for campaign.");
+                Debug.Print("[Bannerlord.SettlementManagerEnhanced] SettlementManagementBehavior + ArenaTournamentMenuBehavior registered for campaign.");
             }
         }
     }
