@@ -114,14 +114,19 @@ namespace Bannerlord.SettlementManagerEnhanced
         private bool game_menu_sme_tournament_sponsor_on_condition(MenuCallbackArgs args)
         {
             int currentGold = Hero.MainHero?.Gold ?? 0;
-            bool disableOption = currentGold < SponsorCost;
 
             args.optionLeaveType = GameMenuOption.LeaveType.Ransom;
 
-            var disabledText = new TextObject("{=SME_ARENA_HOST_HERE_DISABLED}You need at least {GOLD} denars.");
-            disabledText.SetTextVariable("GOLD", SponsorCost);
+            if (currentGold < SponsorCost)
+            {
+                var disabledText = new TextObject("{=SME_ARENA_HOST_HERE_DISABLED}Not enough denars. You need at least {GOLD} denars.");
+                disabledText.SetTextVariable("GOLD", SponsorCost);
 
-            return MenuHelper.SetOptionProperties(args, canPlayerDo: true, disableOption, disabledText);
+                args.IsEnabled = false;
+                args.Tooltip = disabledText;
+            }
+
+            return Settlement.CurrentSettlement?.Town != null;
         }
 
         private void game_menu_sme_tournament_sponsor_on_consequence(MenuCallbackArgs args)

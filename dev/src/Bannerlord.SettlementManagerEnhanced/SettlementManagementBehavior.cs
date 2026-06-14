@@ -10,7 +10,7 @@ namespace Bannerlord.SettlementManagerEnhanced
     ///
     /// - DailyTickSettlementEvent (natural rhythm, good perf).
     /// - Fund scaling / extra construction from current fund (BoostBuildingProcess) for player-owned forts.
-    /// - Castle garrison auto-recruit from prison (prison first, skip IsHero NPCs).
+    /// - Castle garrison auto-recruit from the castle dungeon (daily cap, skip IsHero NPCs).
     ///
     /// Matches the thin daily orchestration style of TroopManagementBehavior.
     /// </summary>
@@ -50,7 +50,7 @@ namespace Bannerlord.SettlementManagerEnhanced
                     _fundManager.ProcessDailyFundBoost(settlement, settings);
                 }
 
-                // 2. Castle-specific: auto recruit from prison (prison first).
+                // 2. Castle-specific: auto recruit from the dungeon.
                 if (settlement.IsCastle && settings.CastlePrisonAutoRecruitEnabled)
                 {
                     _garrisonRecruitManager.TryAutoRecruitForCastle(settlement, settings);

@@ -19,6 +19,9 @@
   <string id="SME_ShowNotifs" text="显示通知" />
   <string id="SME_ShowNotifsHint" text="显示基金消耗、额外建造速度和从监狱向驻军招募的信息提示。" />
   <string id="SME_General" text="常规" />
+  <string id="SME_WarDonation" text="战争募捐" />
+  <string id="SME_WarDonationRatio" text="每点影响力募捐第纳尔" />
+  <string id="SME_WarDonationRatioHint" text="控制在城镇主楼“发起战争募捐”菜单中，每消耗 1 点影响力可获得多少第纳尔。默认：1,000。" />
 
   <!-- Fund Transfer & Boost -->
   <string id="SME_Fund" text="基金转移与加速" />
@@ -31,14 +34,10 @@
 
   <!-- Castle Garrison Recruit -->
   <string id="SME_Garrison" text="城堡驻军招募" />
-  <string id="SME_CastleRecruit" text="城堡监狱自动招募" />
-  <string id="SME_CastleRecruitHint" text="每日为你拥有的城堡执行：从城堡监狱（优先处理）和驻军监狱中，将已达到顺从度的囚犯自动招募进驻军。始终忽略 NPC 英雄（IsHero）。使用原版 PrisonerRecruitmentModel 计算顺从度。" />
-  <string id="SME_GarrTier" text="驻军囚犯最低阶层" />
-  <string id="SME_GarrTierHint" text="仅将达到此阶层或更高的囚犯从监狱自动招募进城堡驻军。" />
-  <string id="SME_MaxGarrPer" text="每城堡每日最大驻军招募数" />
-  <string id="SME_MaxGarrPerHint" text="每个城堡每日从其监狱向驻军转移囚犯的数量上限。" />
-  <string id="SME_GarrHighTier" text="优先高阶囚犯（驻军）" />
-  <string id="SME_GarrHighTierHint" text="为城堡驻军从监狱招募时，优先选择更高阶层的囚犯。" />
+  <string id="SME_CastleRecruit" text="城堡地牢自动招募" />
+  <string id="SME_CastleRecruitHint" text="每日为你拥有的城堡执行：从城堡地牢中按配置数量自动招募兵员进驻军。" />
+  <string id="SME_MaxGarrPer" text="城堡每日地牢招募数" />
+  <string id="SME_MaxGarrPerHint" text="每个城堡每日从地牢自动招募到驻军的最大人数。" />
   <string id="SME_ForceGarr" text="立即强制城堡驻军招募" />
   <string id="SME_ForceGarrHint" text="立即为所有你拥有的城堡执行从监狱到驻军的招募（遵守上限与筛选）。" />
 
@@ -52,7 +51,7 @@
   <!-- 竞技场巡回赛菜单扩展 -->
   <string id="SME_ARENA_ASK_NEXT" text="询问下一轮巡回赛城市" />
   <string id="SME_ARENA_HOST_HERE" text="在本城赞助巡回赛（10,000）" />
-  <string id="SME_ARENA_HOST_HERE_DISABLED" text="你的第纳尔至少需要 {GOLD}。" />
+  <string id="SME_ARENA_HOST_HERE_DISABLED" text="第纳尔不足，需要至少 {GOLD} 第纳尔。" />
   <string id="SME_ARENA_QUERY_MENU" text="{SME_TOURNAMENT_QUERY_REPLY}" />
   <string id="SME_ARENA_LOCATE" text="定位这些城镇" />
   <string id="SME_ARENA_LOCATE_DISABLED" text="当前没有可定位的巡回赛城镇。" />
@@ -61,6 +60,15 @@
   <string id="SME_ARENA_HOSTED_NOW" text="已在 {TOWN} 安排一场赞助巡回赛。" />
   <string id="SME_ARENA_QUEUED" text="{TOWN} 当前已有巡回赛。你赞助的巡回赛已排入下一可用轮次。" />
   <string id="SME_ARENA_QUEUED_STARTED" text="你排队赞助的巡回赛已在 {TOWN} 开始。" />
+
+  <!-- 城镇主楼战争募捐 -->
+  <string id="SME_WAR_DONATION_START" text="发起战争募捐" />
+  <string id="SME_WAR_DONATION_MENU_DESC" text="战争需要金币，也需要声望与人情。动用你的政治影响力，为战事筹集第纳尔。当前比例：每消耗 1 点影响力获得 {SME_WAR_DONATION_RATIO} 第纳尔。" />
+  <string id="SME_WAR_DONATION_SMALL" text="小规模募捐 - 消耗 {SME_WAR_DONATION_SMALL_COST} 影响力，获得 {SME_WAR_DONATION_SMALL_GOLD} 第纳尔" />
+  <string id="SME_WAR_DONATION_MEDIUM" text="中等规模募捐 - 消耗 {SME_WAR_DONATION_MEDIUM_COST} 影响力，获得 {SME_WAR_DONATION_MEDIUM_GOLD} 第纳尔" />
+  <string id="SME_WAR_DONATION_LARGE" text="大规模募捐 - 消耗 {SME_WAR_DONATION_LARGE_COST} 影响力，获得 {SME_WAR_DONATION_LARGE_GOLD} 第纳尔" />
+  <string id="SME_WAR_DONATION_DISABLED" text="影响力不足，需要至少 {INFLUENCE} 影响力。" />
+  <string id="SME_WAR_DONATION_DONE" text="战争募捐完成：消耗 {INFLUENCE} 影响力，筹得 {GOLD} 第纳尔。" />
 
   </strings>
 </base>

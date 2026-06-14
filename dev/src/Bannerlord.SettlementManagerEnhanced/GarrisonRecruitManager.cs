@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
@@ -13,18 +12,15 @@ using TaleWorlds.Localization;
 namespace Bannerlord.SettlementManagerEnhanced
 {
     /// <summary>
-    /// Manager for castle garrison auto-recruit from prison.
+    /// Manager for castle garrison auto-recruit from the castle dungeon.
     ///
     /// Per requirement:
     /// - Only for castles (settlement.IsCastle).
-    /// - Affects prisoners in "castle's prison" and "prison first".
-    /// - Prisoners in prison may include NPCs (heroes); ignore them (IsHero skip, same as TroopManagerEnhanced RecruitmentManager).
-    /// - Uses vanilla PrisonerRecruitmentModel for conformity + the XP field on prison roster (conformity accumulator).
-    /// - Recruits into the castle's garrison MemberRoster (vanilla roster move).
-    /// - Respects settings: min tier, max per day per castle, high-tier priority, only player owned.
-    ///
-    /// "Prison first": we probe for a settlement-level jail roster first (via Party or reflection on Town),
-    /// then fall back to / also process the garrison party's own prison roster.
+    /// - Only uses the settlement-level dungeon/prison roster.
+    /// - Ignores vanilla obedience/conformity checks and recruits up to the configured daily amount.
+    /// - Prisoners may include heroes; those are skipped so only troop stacks are moved.
+    /// - Recruits into the castle's garrison MemberRoster.
+    /// - Only affects player-owned castles.
     /// </summary>
     public class GarrisonRecruitManager
     {
@@ -68,69 +64,31 @@ namespace Bannerlord.SettlementManagerEnhanced
         private int PerformRecruitmentInternal(Settlement settlement, MobileParty garrison, SettlementManagerSettings settings)
         {
             var garrisonRoster = garrison.MemberRoster;
-            var prisonSources = GetPrisonRostersInPriorityOrder(settlement, garrison);
+            var prisonRoster = GetCastleDungeonRoster(settlement);
 
-            if (prisonSources.Count == 0)
+            if (prisonRoster == null || prisonRoster.TotalManCount <= 0)
                 return 0;
 
             int freeSlots = Math.Max(0, GetPartySizeLimit(garrison) - garrisonRoster.TotalManCount);
             if (freeSlots <= 0)
                 return 0;
 
-            int minTier = Math.Max(0, settings.MinimumGarrisonPrisonerTier);
             int maxThisCheck = Math.Max(1, settings.MaxGarrisonRecruitsPerCastle);
-            bool prioritizeHighTier = settings.PrioritizeHighTierGarrisonPrisoners;
 
-            var recruitmentModel = Campaign.Current?.Models?.PrisonerRecruitmentCalculationModel;
-
-            var candidates = new List<GarrisonPrisonerCandidate>();
-
-            foreach (var prisonRoster in prisonSources)
+            var candidates = new List<TroopRosterElement>();
+            for (int i = 0; i < prisonRoster.Count; i++)
             {
-                if (prisonRoster == null || prisonRoster.TotalManCount <= 0)
+                var element = prisonRoster.GetElementCopyAtIndex(i);
+                var troop = element.Character as CharacterObject;
+
+                if (troop == null || troop.IsHero || element.Number <= 0)
                     continue;
 
-                for (int i = 0; i < prisonRoster.Count; i++)
-                {
-                    TroopRosterElement element = prisonRoster.GetElementCopyAtIndex(i);
-                    var troop = element.Character as CharacterObject;
-
-                    if (troop == null || troop.IsHero)
-                        continue;   // "prisoner in prison may have npcs, ignore them"
-
-                    if (troop.Tier < minTier)
-                        continue;
-
-                    // Conformity check (stand-by) - same pattern as TroopManagerEnhanced
-                    int currentConformity = prisonRoster.GetElementXp(i);
-                    int neededPerOne = 100;
-                    if (recruitmentModel != null)
-                    {
-                        neededPerOne = GetConformityNeededToRecruitPrisoner(recruitmentModel, garrison, troop);
-                        if (neededPerOne <= 0) neededPerOne = 1;
-                    }
-
-                    int ready = currentConformity / neededPerOne;
-                    if (ready <= 0)
-                        continue;
-
-                    candidates.Add(new GarrisonPrisonerCandidate
-                    {
-                        Troop = troop,
-                        Count = element.Number,
-                        Ready = ready,
-                        Tier = troop.Tier,
-                        PrisonRoster = prisonRoster,
-                        OriginalIndex = i
-                    });
-                }
+                candidates.Add(element);
             }
 
             if (candidates.Count == 0)
                 return 0;
-
-            if (prioritizeHighTier)
-                candidates = candidates.OrderByDescending(c => c.Tier).ToList();
 
             int totalRecruited = 0;
             int remainingSlots = freeSlots;
@@ -141,16 +99,16 @@ namespace Bannerlord.SettlementManagerEnhanced
                 if (remainingSlots <= 0 || remainingMax <= 0)
                     break;
 
-                int canRecruit = Math.Min(candidate.Count, Math.Min(candidate.Ready, remainingSlots));
-                canRecruit = Math.Min(canRecruit, remainingMax);
+                var troop = candidate.Character as CharacterObject;
+                if (troop == null)
+                    continue;
+
+                int canRecruit = Math.Min(candidate.Number, Math.Min(remainingSlots, remainingMax));
                 if (canRecruit <= 0)
                     continue;
 
-                var troop = candidate.Troop;
-                var sourcePrison = candidate.PrisonRoster;
-
-                // Vanilla-style roster transfer (prison -> garrison members)
-                sourcePrison.AddToCounts(troop, -canRecruit);
+                // Direct roster transfer from the castle dungeon to the garrison.
+                prisonRoster.AddToCounts(troop, -canRecruit);
                 garrisonRoster.AddToCounts(troop, canRecruit);
 
                 try
@@ -174,20 +132,12 @@ namespace Bannerlord.SettlementManagerEnhanced
         }
 
         /// <summary>
-        /// Returns prison rosters in "prison first" order:
-        /// 1. Settlement-level jail / dungeon roster (if discoverable via Party or Town reflection).
-        /// 2. The garrison party's own prison roster.
-        /// Duplicates are deduped.
+        /// Returns the settlement-level dungeon/prison roster when discoverable.
         /// </summary>
-        private List<TroopRoster> GetPrisonRostersInPriorityOrder(Settlement settlement, MobileParty garrison)
+        private TroopRoster? GetCastleDungeonRoster(Settlement settlement)
         {
-            var result = new List<TroopRoster>();
-            var seen = new HashSet<TroopRoster>();
+            TroopRoster? dungeon = null;
 
-            // Castle's dedicated prison (jail) first
-            TroopRoster? jail = null;
-
-            // Try Settlement.Party (PartyBase) if present in the version
             try
             {
                 var partyProp = settlement.GetType().GetProperty("Party", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -195,31 +145,23 @@ namespace Bannerlord.SettlementManagerEnhanced
                 {
                     var partyBase = partyProp.GetValue(settlement) as PartyBase;
                     if (partyBase != null && partyBase.PrisonRoster != null)
-                        jail = partyBase.PrisonRoster;
+                        dungeon = partyBase.PrisonRoster;
                 }
             }
             catch { /* reflection safe */ }
 
-            // Alternative: Town may expose a PrisonRoster in some builds
-            if (jail == null)
+            if (dungeon == null)
             {
                 try
                 {
                     var townPrisonProp = typeof(Town).GetProperty("PrisonRoster", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                     if (townPrisonProp != null)
-                        jail = townPrisonProp.GetValue(settlement.Town) as TroopRoster;
+                        dungeon = townPrisonProp.GetValue(settlement.Town) as TroopRoster;
                 }
                 catch { }
             }
 
-            if (jail != null && seen.Add(jail))
-                result.Add(jail);
-
-            // Garrison prison (always relevant, processed after dedicated prison if both exist)
-            if (garrison?.PrisonRoster != null && seen.Add(garrison.PrisonRoster))
-                result.Add(garrison.PrisonRoster);
-
-            return result;
+            return dungeon;
         }
 
         private int GetPartySizeLimit(MobileParty garrison)
@@ -247,41 +189,5 @@ namespace Bannerlord.SettlementManagerEnhanced
             return int.MaxValue;
         }
 
-        private int GetConformityNeededToRecruitPrisoner(object recruitmentModel, MobileParty garrison, CharacterObject troop)
-        {
-            var methods = recruitmentModel.GetType()
-                .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                .Where(m => m.Name == "GetConformityNeededToRecruitPrisoner");
-
-            foreach (var method in methods)
-            {
-                var parameters = method.GetParameters();
-                object[]? args = null;
-
-                if (parameters.Length == 1 && parameters[0].ParameterType.IsInstanceOfType(troop))
-                    args = new object[] { troop };
-                else if (parameters.Length == 2 && parameters[0].ParameterType.IsInstanceOfType(garrison.Party) && parameters[1].ParameterType.IsInstanceOfType(troop))
-                    args = new object[] { garrison.Party, troop };
-
-                if (args == null)
-                    continue;
-
-                var value = method.Invoke(recruitmentModel, args);
-                if (value is int needed)
-                    return needed;
-            }
-
-            return 100;
-        }
-
-        private struct GarrisonPrisonerCandidate
-        {
-            public CharacterObject Troop;
-            public int Count;
-            public int Ready;
-            public int Tier;
-            public TroopRoster PrisonRoster;
-            public int OriginalIndex;
-        }
     }
 }

@@ -121,37 +121,34 @@ namespace Bannerlord.SettlementManagerEnhanced
 
         #endregion
 
-        #region Castle Garrison Auto Recruit from Prison (prison first, ignore NPC heroes)
+        #region War Donation
+
+        [SettingPropertyInteger(
+            "{=SME_WarDonationRatio}War Donation Denars per Influence",
+            1, 100000, "0",
+            RequireRestart = false,
+            HintText = "{=SME_WarDonationRatioHint}Controls how many denars are gained for each influence spent through the Start War Donation menu in a town keep. Default: 1,000.")]
+        [SettingPropertyGroup("{=SME_WarDonation}War Donation")]
+        public int WarDonationDenarsPerInfluence { get; set; } = 1000;
+
+        #endregion
+
+        #region Castle Garrison Auto Recruit from Dungeon (daily count)
 
         [SettingPropertyBool(
-            "{=SME_CastleRecruit}Castle Auto Recruit from Prison",
+            "{=SME_CastleRecruit}Castle Auto Recruit from Dungeon",
             RequireRestart = false,
-            HintText = "{=SME_CastleRecruitHint}Every day, for your owned castles, automatically recruit conformity-ready prisoners from the castle's prison (and garrison prison) into the garrison. Prison processed first. NPC heroes (IsHero) are always ignored.")]
+            HintText = "{=SME_CastleRecruitHint}Every day, for your owned castles, automatically recruit up to the configured number of troop prisoners from the castle dungeon into the garrison. This ignores vanilla obedience/conformity checks and always skips NPC heroes (IsHero).")]
         [SettingPropertyGroup("{=SME_Garrison}Castle Garrison Recruit")]
         public bool CastlePrisonAutoRecruitEnabled { get; set; } = true;
 
         [SettingPropertyInteger(
-            "{=SME_GarrTier}Minimum Prisoner Tier (Garrison)",
-            0, 6, "0",
-            RequireRestart = false,
-            HintText = "{=SME_GarrTierHint}Only auto-recruit prisoners of this tier or higher into castle garrisons.")]
-        [SettingPropertyGroup("{=SME_Garrison}Castle Garrison Recruit")]
-        public int MinimumGarrisonPrisonerTier { get; set; } = 0;
-
-        [SettingPropertyInteger(
-            "{=SME_MaxGarrPer}Max Garrison Recruits Per Castle Per Day",
+            "{=SME_MaxGarrPer}Daily Castle Dungeon Recruits",
             1, 100, "0",
             RequireRestart = false,
-            HintText = "{=SME_MaxGarrPerHint}Hard cap per castle on how many prisoners can be auto-recruited into its garrison per daily tick.")]
+            HintText = "{=SME_MaxGarrPerHint}Maximum number of prisoners automatically recruited from a castle dungeon into its garrison each daily tick.")]
         [SettingPropertyGroup("{=SME_Garrison}Castle Garrison Recruit")]
         public int MaxGarrisonRecruitsPerCastle { get; set; } = 10;
-
-        [SettingPropertyBool(
-            "{=SME_GarrHighTier}Prioritize High Tier Prisoners (Garrison)",
-            RequireRestart = false,
-            HintText = "{=SME_GarrHighTierHint}When recruiting for garrisons, take higher tier prisoners first.")]
-        [SettingPropertyGroup("{=SME_Garrison}Castle Garrison Recruit")]
-        public bool PrioritizeHighTierGarrisonPrisoners { get; set; } = true;
 
         // Force all castles now (one-shot)
         private bool _forceGarr;
@@ -160,7 +157,7 @@ namespace Bannerlord.SettlementManagerEnhanced
         [SettingPropertyBool(
             "{=SME_ForceGarr}Force Castle Garrison Recruit Now",
             RequireRestart = false,
-            HintText = "{=SME_ForceGarrHint}Immediately attempt prisoner recruitment from prisons into garrisons for all your owned castles (respects tier, caps, and enable). Resets automatically.")]
+            HintText = "{=SME_ForceGarrHint}Immediately attempt dungeon recruitment into garrisons for all your owned castles (respects the enable toggle and daily cap). Resets automatically.")]
         [SettingPropertyGroup("{=SME_Garrison}Castle Garrison Recruit")]
         public bool ForceGarrisonRecruitNow
         {
@@ -215,6 +212,7 @@ namespace Bannerlord.SettlementManagerEnhanced
                 "fund_scaling" => global.FundScalingEnabled,
                 "raise_transfer" => global.RaiseTransferLimit,
                 "castle_prison_recruit" => global.CastlePrisonAutoRecruitEnabled,
+                "war_donation" => global.WarDonationDenarsPerInfluence > 0,
                 _ => false
             };
         }

@@ -18,6 +18,9 @@
   <string id="SME_ShowNotifs" text="Show Notifications" />
   <string id="SME_ShowNotifsHint" text="Display information messages for fund burns, extra build speed, and prison-to-garrison recruits." />
   <string id="SME_General" text="General" />
+  <string id="SME_WarDonation" text="War Donation" />
+  <string id="SME_WarDonationRatio" text="War Donation Denars per Influence" />
+  <string id="SME_WarDonationRatioHint" text="Controls how many denars are gained for each influence spent through the Start War Donation menu in a town keep. Default: 1,000." />
 
   <!-- Fund Transfer & Boost -->
   <string id="SME_Fund" text="Fund Transfer &amp; Boost" />
@@ -30,14 +33,10 @@
 
   <!-- Castle Garrison Recruit -->
   <string id="SME_Garrison" text="Castle Garrison Recruit" />
-  <string id="SME_CastleRecruit" text="Castle Auto Recruit from Prison" />
-  <string id="SME_CastleRecruitHint" text="Daily for your owned castles: recruit conformity-ready prisoners from the castle prison (processed first) and garrison prison into the garrison roster. Always ignores NPC heroes (IsHero). Uses vanilla PrisonerRecruitmentModel conformity." />
-  <string id="SME_GarrTier" text="Minimum Prisoner Tier (Garrison)" />
-  <string id="SME_GarrTierHint" text="Only auto-recruit prisoners of this tier or higher into castle garrisons from prison." />
-  <string id="SME_MaxGarrPer" text="Max Garrison Recruits Per Castle Per Day" />
-  <string id="SME_MaxGarrPerHint" text="Hard cap per castle on prisoners moved from its prison(s) into garrison per daily tick." />
-  <string id="SME_GarrHighTier" text="Prioritize High Tier Prisoners (Garrison)" />
-  <string id="SME_GarrHighTierHint" text="Recruit higher tier prisoners first when filling castle garrisons from prison." />
+  <string id="SME_CastleRecruit" text="Castle Auto Recruit from Dungeon" />
+  <string id="SME_CastleRecruitHint" text="Daily for your owned castles: recruit up to the configured number of troop prisoners from the castle dungeon into the garrison roster. Always ignores NPC heroes (IsHero) and skips vanilla obedience/conformity checks." />
+  <string id="SME_MaxGarrPer" text="Daily Castle Dungeon Recruits" />
+  <string id="SME_MaxGarrPerHint" text="Maximum number of prisoners automatically recruited from a castle dungeon into its garrison each daily tick." />
   <string id="SME_ForceGarr" text="Force Castle Garrison Recruit Now" />
   <string id="SME_ForceGarrHint" text="Immediately run prison-to-garrison recruitment for all your owned castles (respects caps and filters)." />
 
@@ -51,7 +50,7 @@
   <!-- Arena Tournament Menu Extension -->
   <string id="SME_ARENA_ASK_NEXT" text="Ask where the next tournaments will be held" />
   <string id="SME_ARENA_HOST_HERE" text="Sponsor a tournament here (10,000)" />
-  <string id="SME_ARENA_HOST_HERE_DISABLED" text="You need at least {GOLD} denars." />
+  <string id="SME_ARENA_HOST_HERE_DISABLED" text="Not enough denars. You need at least {GOLD} denars." />
   <string id="SME_ARENA_QUERY_MENU" text="{SME_TOURNAMENT_QUERY_REPLY}" />
   <string id="SME_ARENA_LOCATE" text="Locate these towns" />
   <string id="SME_ARENA_LOCATE_DISABLED" text="No known active tournaments to locate." />
@@ -60,6 +59,15 @@
   <string id="SME_ARENA_HOSTED_NOW" text="A sponsored tournament has been added in {TOWN}." />
   <string id="SME_ARENA_QUEUED" text="{TOWN} already has an active tournament. Your sponsored tournament has been queued for the next available round." />
   <string id="SME_ARENA_QUEUED_STARTED" text="Your queued sponsored tournament has now started in {TOWN}." />
+
+  <!-- Town Keep War Donation -->
+  <string id="SME_WAR_DONATION_START" text="Start a war donation drive" />
+  <string id="SME_WAR_DONATION_MENU_DESC" text="War needs coin as much as steel. Call on your political capital to raise denars for the campaign. Current rate: {SME_WAR_DONATION_RATIO} denars for each influence spent." />
+  <string id="SME_WAR_DONATION_SMALL" text="Small drive - spend {SME_WAR_DONATION_SMALL_COST} influence for {SME_WAR_DONATION_SMALL_GOLD} denars" />
+  <string id="SME_WAR_DONATION_MEDIUM" text="Medium drive - spend {SME_WAR_DONATION_MEDIUM_COST} influence for {SME_WAR_DONATION_MEDIUM_GOLD} denars" />
+  <string id="SME_WAR_DONATION_LARGE" text="Large drive - spend {SME_WAR_DONATION_LARGE_COST} influence for {SME_WAR_DONATION_LARGE_GOLD} denars" />
+  <string id="SME_WAR_DONATION_DISABLED" text="Not enough influence. You need at least {INFLUENCE} influence." />
+  <string id="SME_WAR_DONATION_DONE" text="War donation complete: spent {INFLUENCE} influence and raised {GOLD} denars." />
 
   </strings>
 </base>
