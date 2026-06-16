@@ -5,11 +5,6 @@
     <tag language="English" />
   </tags>
   <strings>
-  <!--
-    SettlementManagerEnhanced - English Localization
-    MCMv5 uses {=KEY} syntax in SettingProperty attributes.
-    These strings appear in Mod Options. Matches TroopManagerEnhanced conventions (SME_ prefix).
-  -->
 
   <!-- General -->
   <string id="SME_MainDisplay" text="Settlement Manager Enhanced {VERSION}" />

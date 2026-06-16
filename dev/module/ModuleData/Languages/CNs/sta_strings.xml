@@ -5,12 +5,6 @@
     <tag language="简体中文" />
   </tags>
   <strings>
-  <!--
-    SettlementManagerEnhanced - 简体中文本地化 (Simplified Chinese)
-    MCMv5 使用 {=KEY} 语法在 SettingProperty 属性中。
-    这些字符串会出现在 Mod Options 中。
-    与 TroopManagerEnhanced 保持一致的风格（SME_ 前缀）。
-  -->
 
   <!-- General -->
   <string id="SME_MainDisplay" text="定居点管理增强 {VERSION}" />
