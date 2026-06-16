@@ -22,7 +22,7 @@
     <AssemblyName>Bannerlord.SettlementManagerEnhanced</AssemblyName>
     <RootNamespace>Bannerlord.SettlementManagerEnhanced</RootNamespace>
     <Version>1.0.0</Version>
-    <Authors>YourName</Authors>
+    <Authors>ledshic</Authors>
     <Product>Bannerlord.SettlementManagerEnhanced</Product>
     <Description>Enhanced settlement fund transfer (0-1M), current fund % scaling for extra daily build speed (2%/4% burn + 0.1/0.05 efficiency), and castle garrison auto-recruit from prison (prison first, ignore NPC heroes). MCM configurable. See TroopManagerEnhanced for standardization.</Description>
 
