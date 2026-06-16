@@ -4,6 +4,7 @@
 
 # Bannerlord module/package outputs
 /out/
+/output/
 /_Module/
 
 # Local IDE/user files
