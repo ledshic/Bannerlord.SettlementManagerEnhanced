@@ -102,6 +102,7 @@
   <ItemGroup>
     <!-- MCM v5+ - IncludeAssets="compile" is critical -->
     <PackageReference Include="Bannerlord.MCM" Version="5.11.3" IncludeAssets="compile" />
+    <PackageReference Include="Lib.Harmony" Version="2.3.6" />
 
     <!-- Optional ButterLib -->
     <!-- <PackageReference Include="Bannerlord.ButterLib" Version="2.8.0" IncludeAssets="compile" /> -->
