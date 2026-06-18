@@ -27,12 +27,9 @@ namespace Bannerlord.SettlementManagerEnhanced
             {
                 _harmony = new Harmony(HarmonyId);
                 _harmony.PatchAll(Assembly.GetExecutingAssembly());
-
-                Debug.Print($"[Bannerlord.SettlementManagerEnhanced] SubModule loaded. Harmony patches applied. v{typeof(SubModule).Assembly.GetName().Version}");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.Print($"[SettlementManagerEnhanced] ERROR in OnSubModuleLoad: {ex}");
                 InformationManager.DisplayMessage(new InformationMessage(
                     new TextObject("{=SME_INIT_FAIL}SettlementManagerEnhanced failed to initialize Harmony. Check logs.").ToString(),
                     Colors.Red));
@@ -48,9 +45,9 @@ namespace Bannerlord.SettlementManagerEnhanced
                 _harmony?.UnpatchAll(HarmonyId);
                 _harmony = null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.Print($"[SettlementManagerEnhanced] ERROR in OnSubModuleUnloaded: {ex}");
+                // Non-fatal cleanup guard.
             }
         }
 
@@ -70,8 +67,6 @@ namespace Bannerlord.SettlementManagerEnhanced
                 campaignStarter.AddBehavior(new SettlementManagementBehavior());
                 campaignStarter.AddBehavior(new ArenaTournamentMenuBehavior());
                 campaignStarter.AddBehavior(new WarDonationMenuBehavior());
-
-                Debug.Print("[Bannerlord.SettlementManagerEnhanced] SettlementManagementBehavior + ArenaTournamentMenuBehavior + WarDonationMenuBehavior registered for campaign.");
             }
         }
     }

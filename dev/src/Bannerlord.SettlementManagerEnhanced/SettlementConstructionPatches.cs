@@ -4,7 +4,6 @@ using System.Reflection;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
-using TaleWorlds.Library;
 
 namespace Bannerlord.SettlementManagerEnhanced
 {
@@ -131,12 +130,11 @@ namespace Bannerlord.SettlementManagerEnhanced
                 if (bumped)
                 {
                     // Optional: also ensure the displayed current/max strings don't hard-clamp in some label (best effort)
-                    Debug.Print("[SettlementManagerEnhanced] Raised settlement fund transfer limit toward 1,000,000 via VM patch.");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.Print($"[SettlementManagerEnhanced][Patches] Transfer limit patch error (non-fatal): {ex.Message}");
+                // Non-fatal: if reflection misses a game version, leave vanilla behavior untouched.
             }
         }
 

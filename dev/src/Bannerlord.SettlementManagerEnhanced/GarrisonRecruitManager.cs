@@ -54,9 +54,8 @@ namespace Bannerlord.SettlementManagerEnhanced
 
                 return recruited;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.Print($"[SettlementManagerEnhanced][GarrisonRecruit] Exception for {settlement.Name}: {ex}");
                 return 0;
             }
         }

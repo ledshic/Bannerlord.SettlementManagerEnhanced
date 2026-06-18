@@ -82,8 +82,6 @@ namespace Bannerlord.SettlementManagerEnhanced
                 catch { /* non-fatal */ }
             }
 
-            Debug.Print($"[SettlementManagerEnhanced][Fund] {settlement.Name} (castle={isCastle}): burned {additionalCost} from fund (was {currentFund}), granted +{additionalBuild} build points. Remaining fund: {town.BoostBuildingProcess}");
-
             return additionalBuild;
         }
     }

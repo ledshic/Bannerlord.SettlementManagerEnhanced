@@ -1,7 +1,6 @@
 using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
-using TaleWorlds.Library;
 
 namespace Bannerlord.SettlementManagerEnhanced
 {
@@ -56,9 +55,9 @@ namespace Bannerlord.SettlementManagerEnhanced
                     _garrisonRecruitManager.TryAutoRecruitForCastle(settlement, settings);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.Print($"[SettlementManagerEnhanced] Exception during daily settlement tick for {settlement.Name}: {ex}");
+                // Non-fatal: keep daily tick resilient even if one settlement fails.
             }
         }
     }
